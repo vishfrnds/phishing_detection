@@ -123,7 +123,7 @@ public class UrlChecker {
         }
         return ctr;
     }
-
+//not working
     boolean outOfPositionTLD() 
     {
         int ctr = 0;
