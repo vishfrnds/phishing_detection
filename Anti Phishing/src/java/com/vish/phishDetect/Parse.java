@@ -104,19 +104,7 @@ package com.vish.phishDetect;
         //doc = Jsoup.parse(raw);        
     }
     
-    private Elements getLinks()
-    {
-        Elements links = doc.select("a[href]");
-        return links;
-        /*
-        for (Element link : links) 
-        {
-            // get the value from href attribute
-            System.out.println("\nlink : " + link.attr("href"));
-            System.out.println("text : " + link.text()); 
-        }
-        */
-    }
+    
     
     
 }

@@ -53,7 +53,19 @@ public class HTML_Utilities {
                      
 	}
          */
-    
+    static Elements getLinks(Document doc)
+    {
+        Elements links = doc.select("a[href]");
+        return links;
+        /*
+        for (Element link : links) 
+        {
+            // get the value from href attribute
+            System.out.println("\nlink : " + link.attr("href"));
+            System.out.println("text : " + link.text()); 
+        }
+        */
+    }
     
      
  
