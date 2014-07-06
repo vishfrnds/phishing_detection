@@ -17,7 +17,6 @@ package com.vish.phishDetect;
     import org.jsoup.nodes.Document;
     import org.jsoup.nodes.Element;
     import org.jsoup.select.Elements;
-    import com.vish.hash.JenkinsHash;
     
     public class Parse {
 
@@ -52,18 +51,13 @@ package com.vish.phishDetect;
     {
         this._url = _url;        
     }
-    /*
-    public static void main(String[] args)
+    public void run()
     {
-       Parse p = new Parse("https://www.anientertainers.in");// try www.gmail.com it has been moved BUG
-       p.get_page();
-       p.parse_page();
-       System.out.println(p.hasLoginForm());
-       System.out.println(p.getPageRank());
+        //get_page();
+        parse_page();
     }
-    */
     
-    void get_page()
+    private void get_page()
     {
         try
         {
@@ -95,12 +89,22 @@ package com.vish.phishDetect;
         }
     }
     
-    void parse_page()
+    private void parse_page()
     {
-        doc = Jsoup.parse(raw);        
+        try
+        {
+            
+            System.out.println(_url);
+        doc = Jsoup.connect(_url).get();
+        }
+        catch(Exception e)
+        {
+            //e.printStackTrace();
+        }
+        //doc = Jsoup.parse(raw);        
     }
     
-    Elements getLinks()
+    private Elements getLinks()
     {
         Elements links = doc.select("a[href]");
         return links;
@@ -114,89 +118,5 @@ package com.vish.phishDetect;
         */
     }
     
-    boolean hasLoginForm()
-    {
-        Elements foms = doc.select("form");
-        System.out.println("\nTEXT : " + foms.size());
-        for (Element fom : foms) 
-        {             
-            int ctr = 0;
-            // get the value from href attribute
-            //System.out.println("\nTEXT : " + fom.text());
-            Elements inputs = fom.getElementsByTag("input");
-            
-            for(Element input : inputs)
-            {
-                if(input.hasAttr("type"))
-                {
-                    if(input.attr("type").compareToIgnoreCase("password") == 0)
-                        ctr++;
-                }
-            }
-            if(ctr == 1)
-                return true;
-        }
-        return false;
-    }
     
-             
-             
-             /*
-                     Element loginform = doc.getElementById("your_form_id");
-             System.out.println(loginform.text()+"dsd\n");
-	Elements inputElements = loginform.getElementsByTag("input");
- 
-	List<String> paramList = new ArrayList<String>();
-	for (Element inputElement : inputElements) {
-		String key = inputElement.attr("name");
-		String value = inputElement.attr("value");
-                     
-	}
-         */
-    
-    
-     /**
-      * @return google page rank of given url if it exists else returns -1
-      */
-    public int getPageRank() 
-    {
-        String domain = _url;
-	String result = "";
- 
-	JenkinsHash jenkinsHash = new JenkinsHash();
-	long hash = jenkinsHash.hash(("info:" + domain).getBytes());
- 
-	//Append a 6 in front of the hashing value.
-	String url = "http://toolbarqueries.google.com/tbr?client=navclient-auto&hl=en&"
-	   + "ch=6" + hash + "&ie=UTF-8&oe=UTF-8&features=Rank&q=info:" + domain;
- 
-	//System.out.println("Sending request to : " + url);
- 
-	try {
-		URLConnection conn = new URL(url).openConnection();
- 
-		BufferedReader br = new BufferedReader(new InputStreamReader(
-			conn.getInputStream()));
- 
-		String input;
-		while ((input = br.readLine()) != null) {
- 
-			// What Google returned? Example : Rank_1:1:9, PR = 9
-			//System.out.println(input);
- 
-			result = input.substring(input.lastIndexOf(":") + 1);
-		}
- 
-	} catch (Exception e) {
-		System.out.println(e.getMessage());
-	}
- 
-	if ("".equals(result)) {
-		return -1;
-	} else {
-		return Integer.valueOf(result);
-	}
- 
-  }
- 
 }
