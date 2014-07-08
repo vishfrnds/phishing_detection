@@ -100,7 +100,7 @@ package com.vish.phishDetect;
         catch(Exception e)
         {
             doc = null;
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         //doc = Jsoup.parse(raw);        
     }

@@ -9,6 +9,8 @@ package com.vish.phishDetect;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -34,72 +36,39 @@ public class GiveFinalRating {
     {
         
         _url = _url.replaceFirst("://www.", "://"); // remove www. from domain name
+        
         int match = URL_Utilities.perMatch(_url);
+        System.out.println(_url + "\n" + match);
         if(match >= 80)
             return match;
         match = match / 5;    // 80 -> 8;
         match += URL_Utilities.checkURL(_url);
+        System.out.println(_url + "\n" + match);
         if(match > 105)
             return match;           
         match = match/3;   // 100->33
-        Parse p = new Parse(_url);
-        p.run();
-        if(p.getDoc() != null)
-        {
-           // System.out.println(_url+"\n"+p.getRaw());
-            match += new HTML_Utilities().checkHTML(_url, p.getDoc());
-           
-            
-        }
-        return match;
-        /*
-        URL url;
-        String domainName ="";
-        try
-        {
+        
+        URL url = null;
+        try {
             url = new URL(_url);
-            domainName = url.getHost();
-            Web_Utilities.domainAge(domainName);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(GiveFinalRating.class.getName()).log(Level.SEVERE, null, ex);
         }
-        catch(MalformedURLException e)
+        if(url != null)
         {
-            url = null;
-        }
-        return 0;
-         
-        
-           // if it matches to prev stored urls
-            
-        match = match / 5;    // 80 -> 8;
-        match += URL_Utilities.checkURL(_url);
-       // if(match > 105)
-            return match;
-           
-        match = match/3;   // 100->33
-        Parse p = new Parse(_url);
-        p.run();
+            Parse p = new Parse(_url);
+            p.run();
         if(p.getDoc() != null)
         {
             
+           // System.out.println(_url+"\n"+p.getRaw());
+            match += new HTML_Utilities().checkHTML(url, p.getDoc());
+            System.out.println(_url + "\n" + match);            
+           match += new Web_Utilities().checkWEB(_url);           
+            System.out.println(_url + "\n" + match);
         }
-        match = match/5;
-        
+        }
         return match;
-        
-        
-        
-        
-        
-        
-            return 404;
-        //System.out.println(p.getDoc());
-        //
-            match = match / 5 + URL_Utilities.checkURL(_url);
-            return match;
-        }
-        //else
-        //    return match/2;
-                */
     }
     
 }

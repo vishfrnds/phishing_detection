@@ -31,11 +31,13 @@ public class Calculate extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("text/plain");  // Set content type of the response so that jQuery knows what it can expect.
+    response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
         try {
             /* TODO output your page here. You may use following sample code. */
             String url = request.getParameter("q");
+            System.out.println("in serv" + url);
             GiveFinalRating r = new GiveFinalRating();
             int v = r.run(url);
             out.println(v);

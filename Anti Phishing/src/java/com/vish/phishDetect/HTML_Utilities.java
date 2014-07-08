@@ -19,15 +19,15 @@ import org.jsoup.select.Elements;
  */
 public class HTML_Utilities {
     ArrayList<Element> loginForms = new ArrayList<Element>();
-    URL url;
-    int checkHTML(String _url, Document doc)
+    
+    int checkHTML(URL url, Document doc)
     {
         int ans = 0;
         
         if(hasLoginForm(doc))
         {
             ans += 10;
-            if(badActionField())
+            if(badActionField(url))
             {
                 ans += 50;
             }
@@ -65,7 +65,7 @@ public class HTML_Utilities {
         return false;
     }
     
-    boolean badActionField()
+    boolean badActionField(URL url)
     {
         System.out.println("jkj"+loginForms.size());
         for (Element fom : loginForms) 

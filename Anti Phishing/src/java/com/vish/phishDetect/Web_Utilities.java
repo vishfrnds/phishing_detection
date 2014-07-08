@@ -22,7 +22,17 @@ import org.apache.commons.net.whois.WhoisClient;
  * @author vishwas
  */
 public class Web_Utilities {
-    /**
+   
+    int checkWEB(String _url)
+    {
+        int ans = 0;
+        ans += (4 - getPageRank(_url)) * 5;
+        return ans;        
+    }
+    
+    
+    
+     /**
      * @param _url
       * @return google page rank of given url if it exists else returns -10
       */
@@ -62,7 +72,7 @@ public class Web_Utilities {
         System.out.println("pr "+ result);
 	if ("".equals(result))
         {
-		return -10;
+		return -5;
 	} 
         else 
         {
