@@ -6,6 +6,7 @@
 
 package com.vish.servlets;
 
+import com.vish.phishDetect.GiveFinalRating;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -35,7 +36,9 @@ public class Calculate extends HttpServlet {
         try {
             /* TODO output your page here. You may use following sample code. */
             String url = request.getParameter("q");
-            out.println(url);
+            GiveFinalRating r = new GiveFinalRating();
+            int v = r.run(url);
+            out.println(v);
         } finally {
             out.close();
         }

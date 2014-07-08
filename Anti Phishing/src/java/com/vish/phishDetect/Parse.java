@@ -94,11 +94,12 @@ package com.vish.phishDetect;
         try
         {
             
-            System.out.println(_url);
+            //System.out.println(_url);
         doc = Jsoup.connect(_url).get();
         }
         catch(Exception e)
         {
+            doc = null;
             //e.printStackTrace();
         }
         //doc = Jsoup.parse(raw);        

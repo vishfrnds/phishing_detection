@@ -5,6 +5,10 @@
  */
 
 package com.vish.phishDetect;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -14,12 +18,31 @@ import org.jsoup.select.Elements;
  * @author vishwas
  */
 public class HTML_Utilities {
-    static boolean hasLoginForm(Document doc)
+    ArrayList<Element> loginForms = new ArrayList<Element>();
+    URL url;
+    int checkHTML(String _url, Document doc)
+    {
+        int ans = 0;
+        
+        if(hasLoginForm(doc))
+        {
+            ans += 10;
+            if(badActionField())
+            {
+                ans += 50;
+            }
+            ans += NonMatchingUrls(doc);
+            
+        }
+        return ans;
+    }
+    boolean hasLoginForm(Document doc)
     {
         Elements foms = doc.select("form");
         //System.out.println("\nTEXT : " + foms.size());
         for (Element fom : foms) 
         {             
+            
             int ctr = 0;
             // get the value from href attribute
             //System.out.println("\nTEXT : " + fom.text());
@@ -30,16 +53,51 @@ public class HTML_Utilities {
                 if(input.hasAttr("type"))
                 {
                     if(input.attr("type").compareToIgnoreCase("password") == 0)
+                    {
+                        loginForms.add(fom);
                         ctr++;
+                    }
                 }
             }
-            if(ctr == 1)
+            if(ctr >= 1 && ctr != 2)
                 return true;
         }
         return false;
     }
     
-             
+    boolean badActionField()
+    {
+        System.out.println("jkj"+loginForms.size());
+        for (Element fom : loginForms) 
+        {   
+            String action = fom.attr("action");
+            if(action == null)
+                return true;
+            try
+            {
+                URL _action = new URL(action);
+                if(!(_action.getHost().equalsIgnoreCase(url.getHost())))
+                    return true;
+            }
+            catch(MalformedURLException e)
+            {
+                return true;
+            }
+        }  
+        return false;
+    }
+    
+    int NonMatchingUrls(Document doc)
+    {
+        Elements links = doc.select("a[href]");
+        for (Element link : links) 
+        {
+            // get the value from href attribute
+            System.out.println("\nlink : " + link.attr("href"));
+            System.out.println("text : " + link.text()); 
+        }
+        return 0;
+    }
              
              /*
                      Element loginform = doc.getElementById("your_form_id");
