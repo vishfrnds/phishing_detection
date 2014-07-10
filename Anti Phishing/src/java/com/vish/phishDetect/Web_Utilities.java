@@ -26,7 +26,11 @@ public class Web_Utilities {
     int checkWEB(String _url)
     {
         int ans = 0;
-        ans += (4 - getPageRank(_url)) * 5;
+        int pr = getPageRank(_url);
+        if(pr >= 2)
+            ans -= pr * 5;
+        else
+            ans += -5*pr;
         return ans;        
     }
     

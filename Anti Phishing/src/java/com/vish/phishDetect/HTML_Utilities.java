@@ -8,7 +8,8 @@ package com.vish.phishDetect;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -23,23 +24,23 @@ public class HTML_Utilities {
     int checkHTML(URL url, Document doc)
     {
         int ans = 0;
-        
+        int multplier = 1;
         if(hasLoginForm(doc))
         {
-            ans += 10;
-            if(badActionField(url))
-            {
-                ans += 50;
-            }
-            ans += NonMatchingUrls(doc);
-            
+            multplier = 5;
+            ans += 20;            
         }
+        if(badActionField(url))
+        {
+                ans += 5 * multplier;
+        }
+        ans += nonMatchingUrls(url, doc) * multplier/3;
         return ans;
     }
     boolean hasLoginForm(Document doc)
     {
         Elements foms = doc.select("form");
-        //System.out.println("\nTEXT : " + foms.size());
+        System.out.println("\nTEXT : " + foms.size());
         for (Element fom : foms) 
         {             
             
@@ -87,44 +88,38 @@ public class HTML_Utilities {
         return false;
     }
     
-    int NonMatchingUrls(Document doc)
+    int nonMatchingUrls(URL url, Document doc)
     {
         Elements links = doc.select("a[href]");
+        int invalid = 0, total = 0, crossdomain = 0;
         for (Element link : links) 
         {
-            // get the value from href attribute
+            total++;
+            String attr = link.attr("href");
             System.out.println("\nlink : " + link.attr("href"));
             System.out.println("text : " + link.text()); 
+            
+            if(attr == null || attr.equalsIgnoreCase("") || attr.charAt(0) == '#' || attr.equalsIgnoreCase("index.html"))
+            {
+                invalid++;   
+            }
+            else if(attr.charAt(0) != '/' )                
+            {
+                attr = attr.replaceFirst("://www.", "://");
+                try 
+                {
+                    URL _attr = new URL(attr);
+                    if(!(_attr.getHost().equalsIgnoreCase(url.getHost())))
+                        crossdomain++;
+                        
+                } 
+                catch (Exception e) 
+                {
+                    e.printStackTrace();
+                }                
+            }
+            
         }
-        return 0;
+        return (crossdomain+2*invalid)*100/total;
     }
-             
-             /*
-                     Element loginform = doc.getElementById("your_form_id");
-             System.out.println(loginform.text()+"dsd\n");
-	Elements inputElements = loginform.getElementsByTag("input");
- 
-	List<String> paramList = new ArrayList<String>();
-	for (Element inputElement : inputElements) {
-		String key = inputElement.attr("name");
-		String value = inputElement.attr("value");
-                     
-	}
-         */
-    static Elements getLinks(Document doc)
-    {
-        Elements links = doc.select("a[href]");
-        return links;
-        /*
-        for (Element link : links) 
-        {
-            // get the value from href attribute
-            System.out.println("\nlink : " + link.attr("href"));
-            System.out.println("text : " + link.text()); 
-        }
-        */
-    }
-    
-     
- 
 }

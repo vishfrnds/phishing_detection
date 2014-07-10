@@ -9,8 +9,6 @@ package com.vish.phishDetect;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -35,8 +33,7 @@ public class GiveFinalRating {
     public int run(String _url)
     {
         
-        _url = _url.replaceFirst("://www.", "://"); // remove www. from domain name
-        
+        _url = _url.replaceFirst("://www.", "://"); // remove www. from domain name      
         int match = URL_Utilities.perMatch(_url);
         System.out.println(_url + "\n" + match);
         if(match >= 80)
@@ -49,25 +46,30 @@ public class GiveFinalRating {
         match = match/3;   // 100->33
         
         URL url = null;
-        try {
+        try 
+        {
             url = new URL(_url);
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(GiveFinalRating.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (MalformedURLException ex) {
+            ex.printStackTrace();
+
         }
         if(url != null)
         {
             Parse p = new Parse(_url);
             p.run();
-        if(p.getDoc() != null)
-        {
-            
-           // System.out.println(_url+"\n"+p.getRaw());
-            match += new HTML_Utilities().checkHTML(url, p.getDoc());
-            System.out.println(_url + "\n" + match);            
-           match += new Web_Utilities().checkWEB(_url);           
-            System.out.println(_url + "\n" + match);
+             System.out.println(_url+"\n NO doc");
+            if(p.getDoc() != null)
+            {
+                match = match/3;
+                 System.out.println(_url+"\n got doc");
+                match += new HTML_Utilities().checkHTML(url, p.getDoc());
+                System.out.println(_url + "\n" + match);            
+                match += new Web_Utilities().checkWEB(_url);           
+                System.out.println(_url + "\n" + match);
+            }
         }
-        }
+        match /= 2;
         return match;
     }
     
