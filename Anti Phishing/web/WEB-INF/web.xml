@@ -4,9 +4,18 @@
         <servlet-name>Calculate</servlet-name>
         <servlet-class>com.vish.servlets.Calculate</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Update</servlet-name>
+        <load-on-startup>0</load-on-startup>
+        <servlet-class>com.vish.servlets.Update</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Calculate</servlet-name>
         <url-pattern>/Calculate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Update</servlet-name>
+        <url-pattern>/Update</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

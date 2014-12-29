@@ -37,11 +37,15 @@ public class Calculate extends HttpServlet {
         try {
             /* TODO output your page here. You may use following sample code. */
             String url = request.getParameter("q");
-            System.out.println("in serv" + url);
+            out.println("in serv" + url);
             GiveFinalRating r = new GiveFinalRating();
             int v = r.run(url);
             out.println(v);
-        } finally {
+        } 
+        catch(Exception e)
+        {
+            out.println(e);
+        }finally {
             out.close();
         }
     }

@@ -6,6 +6,7 @@
 
 package com.vish.phishDetect;
 
+import com.vish.precompute.Data;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
@@ -17,13 +18,11 @@ import java.util.Arrays;
 public class GiveFinalRating {
     public static void main(String args[])
     {
-        Arrays.sort(URL_Utilities.phish_list);
-        String[] phish_list = com.vish.phishDetect.Data.phish_list;
         int ans = 0;
-        int l = phish_list.length;
+        int l = Data.phish_list.size();
         //for(int i = 0; i < l; i +=100)
         {
-            int x = new GiveFinalRating().run("http://academics.mnnit.ac.in/index.jsp");
+            int x = new GiveFinalRating().run("http://academics.mnnit.ac.in");
             //System.out.println("http://acade");
             ans += x;
         }

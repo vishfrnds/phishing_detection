@@ -47,41 +47,40 @@ package com.vish.phishDetect;
         this.doc = doc;
     }
     
-    Parse(String _url)
+    public Parse(String _url)
     {
         this._url = _url;        
     }
     public void run()
     {
-        //get_page();
-        parse_page();
+       // get_page();
+       parse_page();
     }
     
     private void get_page()
     {
         try
         {
-             URL url = new URL(_url);
-             URLConnection urlConnection = url.openConnection();
-             HttpURLConnection connection = null;
-             if(urlConnection instanceof HttpURLConnection)
-             {
-                connection = (HttpURLConnection) urlConnection;
-             }
-             else
-             {
-                System.out.println("Please enter an HTTP URL.");
-                return;
-             }
-             BufferedReader in = new BufferedReader(
-             new InputStreamReader(connection.getInputStream()));
-             raw = "";
-             String current;
-             while((current = in.readLine()) != null)
-             {
-                raw += current;
-             }
-             //System.out.println(raw);
+             final URL website = new URL(_url); // The website you want to connect
+
+        // -- Setup connection through proxy
+            Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 8080)); // set proxy server and port
+           
+            HttpURLConnection httpUrlConnetion = (HttpURLConnection) website.openConnection(proxy);
+            httpUrlConnetion.connect();
+
+// -- Download the website into a buffer
+            BufferedReader br = new BufferedReader(new InputStreamReader(httpUrlConnetion.getInputStream()));
+            StringBuilder buffer = new StringBuilder();
+            String str;
+
+            while( (str = br.readLine()) != null )
+            {
+                buffer.append(str);
+            }
+
+            // -- Parse the buffer with Jsoup
+            doc = Jsoup.parse(buffer.toString());
         }
         catch(IOException e)
         {
@@ -93,9 +92,20 @@ package com.vish.phishDetect;
     {
         try
         {
-            
+            Authenticator.setDefault(
+               new Authenticator() {
+                  public PasswordAuthentication getPasswordAuthentication() {
+                     return new PasswordAuthentication(
+                           "edcguest", "edcguest".toCharArray());
+                  }
+               }
+            );
+            System.setProperty("http.proxyHost", "172.31.100.26");
+            System.setProperty("http.proxyPort", "3128");
+            //System.setProperty("http.proxyUser", "edcguest");
+            //System.setProperty("http.proxyPassword", "edcguest");
             //System.out.println(_url);
-        doc = Jsoup.connect(_url).get();
+            doc = Jsoup.connect(_url).get();
         }
         catch(Exception e)
         {
