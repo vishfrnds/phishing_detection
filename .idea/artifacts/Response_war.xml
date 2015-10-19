@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="Response:war">
+    <output-path>$PROJECT_DIR$/Response/target</output-path>
+    <root id="archive" name="anti_phishing_response-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="Response:war exploded" />
+    </root>
+  </artifact>
+</component>
