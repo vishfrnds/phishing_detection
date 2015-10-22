@@ -1,0 +1,19 @@
+<web-app>
+    <display-name>Phishing Detection</display-name>
+    <servlet>
+        <servlet-name>Calculate</servlet-name>
+        <servlet-class>servlets.Calculate</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Calculate</servlet-name>
+        <url-pattern>/calc</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Update</servlet-name>
+        <servlet-class>servlets.Update</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Update</servlet-name>
+        <url-pattern>/update</url-pattern>
+    </servlet-mapping>
+</web-app>

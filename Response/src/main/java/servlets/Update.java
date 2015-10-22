@@ -1,56 +1,43 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package servlets;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.net.URL;
-import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URL;
+import java.util.Date;
 
-/**
- *
- * @author vish
- */
 public class Update extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setIntHeader("Refresh", 24*60*60);
+        response.setIntHeader("Refresh", 24 * 60 * 60);
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         Date date = new Date();
         out.println("Update Started at " + date.toString());
         System.out.println("Update Started at " + date.toString());
-        
-        /*
+
+
         try {
-            System.setProperty("java.net.useSystemProxies", "true");
+           /* System.setProperty("java.net.useSystemProxies", "true");
                   
             System.setProperty("http.proxyHost", "172.31.100.29");
             System.setProperty("http.proxyPort", "" + "3128");
             System.setProperty("http.proxyUser","edcguest");
             System.setProperty("http.proxyPassword","edcguest");
+            */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -64,7 +51,7 @@ public class Update extends HttpServlet {
             String fileName = "online-valid.json";
             String url = "http://data.phishtank.com/data/";
             out.println(url + key + "/" + fileName);
-            URL link = new URL(url + key + "/" + fileName); //The file that you want to download
+            URL link = new URL("http://www.cnds.jhu.edu/courses/cs437/exercises/Ex1_2014.txt");//url + key + "/" + fileName); //The file that you want to download
             InputStream in = new BufferedInputStream(link.openStream());
             ByteArrayOutputStream outp = new ByteArrayOutputStream();
             byte[] buf = new byte[1024];
@@ -81,8 +68,10 @@ public class Update extends HttpServlet {
             byte[] res = outp.toByteArray();
             String p = getServletContext().getRealPath("/");
             File f = new File(p + "/" + fileName);
+
             FileOutputStream fos = new FileOutputStream(f);
             fos.write(res);
+            System.out.print(outp + "\n" + p + "/" + fileName);
             fos.close();
         } catch (Exception e) {
             out.println(e);
@@ -90,17 +79,18 @@ public class Update extends HttpServlet {
         } finally {
             out.close();
         }
-        */
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -111,10 +101,10 @@ public class Update extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
