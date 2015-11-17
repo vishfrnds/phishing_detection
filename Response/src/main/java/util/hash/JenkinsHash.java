@@ -23,9 +23,9 @@ public class JenkinsHash {
     private static final long MAX_VALUE = 0xFFFFFFFFL;
 
     // internal variables used in the various calculations
-    long a;
-    long b;
-    long c;
+    private long a;
+    private long b;
+    private long c;
 
     /**
      * Convert a byte into a long value without making it negative.
@@ -120,7 +120,7 @@ public class JenkinsHash {
      *            run. 0 if none.
      * @return Hash value for the buffer.
      */
-    public long hash(byte[] buffer, long initialValue) {
+    private long hash(byte[] buffer, long initialValue) {
         int len, pos;
 
         // set up the internal state

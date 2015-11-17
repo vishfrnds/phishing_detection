@@ -38,7 +38,7 @@ var kittenGenerator = {
             else {// code for IE6, IE5
                 xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
             }
-            xmlhttp.open("GET", "http://localhost:8084/Anti%20Phishing?q=" + tablink, false);
+            xmlhttp.open("GET", "http://localhost:8080/anti_phishing_response/calc?q=" + tablink, false);
             xmlhttp.send();
 
             document.getElementById("result").innerHTML = xmlhttp.responseText;

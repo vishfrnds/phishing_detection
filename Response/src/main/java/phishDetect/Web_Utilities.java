@@ -6,6 +6,7 @@
 
 package phishDetect;
 
+import data.Url;
 import util.hash.JenkinsHash;
 import org.apache.commons.net.whois.WhoisClient;
 
@@ -22,6 +23,10 @@ import java.util.regex.Pattern;
  * @author vishwas
  */
 public class Web_Utilities {
+    Url url;
+    public Web_Utilities(Url url) {
+        this.url = url;
+    }
 
     /**
      * @param _url
@@ -82,8 +87,6 @@ public class Web_Utilities {
             whoisResult.append(whoisData);
             crunchifyWhois.disconnect();
 
-        } catch (SocketException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

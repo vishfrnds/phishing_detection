@@ -8,7 +8,8 @@ import java.net.*;
 import java.util.*;
 
 /**
- * Created by root on 21/10/15.
+ * Created by Vishwas on 21/10/15.
+ * Copyright (C) 2015  Vishwas Tripathi
  */
 public class URLNormalizer {
 /**
@@ -76,7 +77,7 @@ public class URLNormalizer {
         }
 
         final String[] pairs = queryString.split("&");
-        final Map<String, String> params = new HashMap<String, String>(pairs.length);
+        final Map<String, String> params = new HashMap<>(pairs.length);
 
         for (final String pair : pairs)
         {
@@ -119,7 +120,7 @@ public class URLNormalizer {
             }
         }
 
-        return new TreeMap<String, String>(params);
+        return new TreeMap<>(params);
     }
 
     /**
@@ -135,7 +136,7 @@ public class URLNormalizer {
             return "";
         }
 
-        final StringBuffer sb = new StringBuffer(350);
+        final StringBuilder sb = new StringBuilder(350);
         final Iterator<Map.Entry<String, String>> iter = sortedParamMap.entrySet().iterator();
 
         while (iter.hasNext())

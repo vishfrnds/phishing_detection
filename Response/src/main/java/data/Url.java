@@ -5,13 +5,15 @@ import org.jsoup.nodes.Document;
 import util.BuildSha1;
 import util.URLNormalizer;
 
+import java.net.Authenticator;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.PasswordAuthentication;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by root on 23/10/15.
+ * Created by Vishwas on 23/10/15.
+ * Copyright (C) 2015  Vishwas Tripathi
  */
 public class Url {
     // does not follow all java-bean rules
@@ -47,7 +49,7 @@ public class Url {
     public Document getPage() {
         if (page == null) {
             try {
-            /*
+
             Authenticator.setDefault(
                     new Authenticator() {
                         public PasswordAuthentication getPasswordAuthentication() {
@@ -56,18 +58,27 @@ public class Url {
                         }
                     }
             );
-            System.setProperty("http.proxyHost", "172.31.100.26");
+            System.setProperty("http.proxyHost", "172.31.103.29");
             System.setProperty("http.proxyPort", "3128");
-            */
-                //System.setProperty("http.proxyUser", "edcguest");
-                //System.setProperty("http.proxyPassword", "edcguest");
+
+               // System.setProperty("http.proxyUser", "edcguest");
+               // System.setProperty("http.proxyPassword", "edcguest");
                 //System.out.println(_url);
+
+                System.setProperty("java.net.useSystemProxies", "true");
+
+            System.setProperty("http.proxyHost", "172.31.103.29");
+            System.setProperty("http.proxyPort", "" + "3128");
+            System.setProperty("http.proxyUser","edcguest");
+            System.setProperty("http.proxyPassword","edcguest");
+
                 page = Jsoup.connect(url).get();
             } catch (Exception e) {
                 page = null;
                 e.printStackTrace();
             }
         }
+        System.out.println (page);
         return page;
     }
 

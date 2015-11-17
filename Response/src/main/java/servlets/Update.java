@@ -55,7 +55,7 @@ public class Update extends HttpServlet {
             InputStream in = new BufferedInputStream(link.openStream());
             ByteArrayOutputStream outp = new ByteArrayOutputStream();
             byte[] buf = new byte[1024];
-            int n = 0;
+            int n;
 
             while (-1 != (n = in.read(buf))) {
                 System.out.println("here");

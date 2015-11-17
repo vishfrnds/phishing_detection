@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class BuildSha1 {
-    final static Logger logger = Logger.getLogger(BuildSha1.class);
+    private final static Logger logger = Logger.getLogger(BuildSha1.class);
     private final String _url;
     private String doc;
 

@@ -6,6 +6,7 @@
 
 package phishDetect;
 
+import data.Url;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -18,7 +19,11 @@ import java.util.ArrayList;
  * @author vishwas
  */
 public class HTML_Utilities {
-    ArrayList<Element> loginForms = new ArrayList<Element>();
+    ArrayList<Element> loginForms = new ArrayList<>();
+    Url url;
+    public HTML_Utilities(Url url) {
+        this.url = url;
+    }
 
     int checkHTML(URL url, Document doc) {
         int ans = 0;

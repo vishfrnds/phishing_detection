@@ -1,17 +1,14 @@
 package data;
 
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 
 /**
- * Created by root on 20/10/15.
+ * Created by Vishwas on 20/10/15.
+ * Copyright (C) 2015  Vishwas Tripathi
  */
 public class Data {
     private static data.Data ourInstance = new data.Data();
@@ -20,22 +17,34 @@ public class Data {
         return ourInstance;
     }
 
+    private void reloadData() {
+      //  Jedis jedis = jedisPool.getResource();
+    }
+
     private JedisPool jedisPool;
 
     private Data() {
         JedisPoolConfig poolConfig = new JedisPoolConfig();
         poolConfig.setMaxTotal(128);
         jedisPool = new JedisPool(poolConfig, "127.0.0.1", 6379);//, , Integer.parseInt(util.ApplicationProperties.getProperty("port").toString()));
+        reloadData();
+
+        phish_list = new PhishList("phishList:");
     }
 
     public JedisPool getJedisPool() {
         return jedisPool;
     }
 
-    public static ArrayList<String> phish_list = new ArrayList();
-    public static HashSet<String> sha = new HashSet<String>();
+    public PhishList getPhish_list() {
+        return phish_list;
+    }
 
-    static public void add(ArrayList<String> _phish_list, ArrayList<String> _sha) {
+    private PhishList phish_list;
+    //private ArrayList<String> phish_list = new ArrayList();
+    private HashSet<String> sha = new HashSet<>();
+/*
+    public void add(ArrayList<String> _phish_list, ArrayList<String> _sha) {
         System.out.println("Adding " + _phish_list.size() + " " + _sha.size());
         try {
             File url = new File("url_sha.txt");
@@ -57,21 +66,11 @@ public class Data {
                 i++;
             }
             Collections.sort(phish_list);
-                /*
-                for (String sha1 : _sha) {
-                    if(sha1 != null)
-                    {
-                        System.out.println(sha1);
-                        sha.add(sha1);
-                        hashF.println(sha1);
-                    }
-                }
-                hashF.close();
-                        */
             urlF.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+        */
 }

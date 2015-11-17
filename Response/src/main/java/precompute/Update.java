@@ -8,7 +8,6 @@ import java.io.*;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,7 +29,7 @@ public class Update {
         String url = "http://data.phishtank.com/data/";
 
         System.out.println(url + key + "/" + fileName);
-        URL link = null;
+        URL link;
         try {
             link = new URL(url + key + "/" + fileName);
             //(url + key + "/" + fileName); //The file that you want to download
@@ -48,13 +47,9 @@ public class Update {
 
     public void read() {
         //download();
-        //ArrayList<String> phish_list = new ArrayList<String>();
-        ArrayList<String> phish_list = new ArrayList();
-        ArrayList<String> sha = new ArrayList<String>();
         Jedis jedis = null;
         try {
             Pattern pattern = Pattern.compile("\"url\":\"([^\"]*)");
-            File f = new File(fileName);
             BufferedReader r = new BufferedReader(new FileReader(fileName));
             String line;
 
@@ -65,11 +60,11 @@ public class Update {
                     // phish_list.add(m.group(1).replaceAll("\\\\", ""));
                     String url_ = m.group(1);
                     Url url = new Url(url_);
-                    System.out.println(url.getUrl());
-                    if (!jedis.exists(url.getCanonical_hash())) {
+                    System.out.println("url: " + url.getUrl());
+                    if (!jedis.exists("url:" + url.getCanonical_hash())) {
                         jedis.set("url:" + url.getCanonical_hash(), url.getUrl());
                         if (url.getPage_hash() != null) {
-                            jedis.lpush("phishlist:" + url.getPage_hash(), url.getCanonical_hash());
+                            jedis.lpush("phishList:" + url.getPage_hash(), url.getCanonical_hash());
                         }
                     }
                 }
