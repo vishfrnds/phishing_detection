@@ -28,6 +28,6 @@ public class SHA1Hash {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        return byteArrayToHexString(md.digest(convertme.getBytes()));
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        return byteArrayToHexString(md.digest(convertme.getBytes()));
     }
 }

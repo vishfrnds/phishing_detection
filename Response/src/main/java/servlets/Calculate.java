@@ -36,10 +36,16 @@ public class Calculate extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             String url = request.getParameter("q");
-            out.println("in serv" + url);
+            //out.println("in serv" + url);
             GiveFinalRating r = new GiveFinalRating(url);
-            int v = r.run();
-            out.println(v);
+            double v = r.run();
+            if (v < 2)
+                out.println ("Not a phishing site");
+            if (v >= 2 && v <= 4)
+                out.println("Warning!!! It may be phishing site");
+            else
+                out.println("Warning!!! It is a phishing website");
+            //out.println(v);
         } catch (Exception e) {
             out.println(e);
         } finally {

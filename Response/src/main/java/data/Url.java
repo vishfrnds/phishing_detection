@@ -4,6 +4,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import util.BuildSha1;
 import util.URLNormalizer;
+import util.hash.SHA1Hash;
 
 import java.net.Authenticator;
 import java.net.MalformedURLException;
@@ -25,6 +26,7 @@ public class Url {
 
     public Url(String url) {
         super();
+        System.out.println ("URL" + url);
         this.url = url.replaceAll("\\\\", "").replaceFirst("://www.", "://"); // remove www. from domain name
         canonical_hash = null;
         page = null;
@@ -48,8 +50,9 @@ public class Url {
 
     public Document getPage() {
         if (page == null) {
-            try {
 
+            try {
+                /*
             Authenticator.setDefault(
                     new Authenticator() {
                         public PasswordAuthentication getPasswordAuthentication() {
@@ -58,38 +61,41 @@ public class Url {
                         }
                     }
             );
-            System.setProperty("http.proxyHost", "172.31.103.29");
+            System.setProperty("http.proxyHost", "172.31.102.14");
             System.setProperty("http.proxyPort", "3128");
 
-               // System.setProperty("http.proxyUser", "edcguest");
-               // System.setProperty("http.proxyPassword", "edcguest");
-                //System.out.println(_url);
+                //System.out.println(_url)
 
                 System.setProperty("java.net.useSystemProxies", "true");
 
-            System.setProperty("http.proxyHost", "172.31.103.29");
+            System.setProperty("http.proxyHost", "172.31.102.14");
             System.setProperty("http.proxyPort", "" + "3128");
             System.setProperty("http.proxyUser","edcguest");
             System.setProperty("http.proxyPassword","edcguest");
-
+            */
                 page = Jsoup.connect(url).get();
+                ;
             } catch (Exception e) {
                 page = null;
                 e.printStackTrace();
             }
         }
-        System.out.println (page);
+        //System.out.println (page);
         return page;
     }
 
     public String getPage_hash() {
         if (page_hash == null) {
-            page_hash = new BuildSha1(clean(getPage().toString())).generate();
+            try {
+                page_hash = SHA1Hash.toSHA1(clean(getPage().toString()));
+            }catch (Exception e) {
+                //e.printStackTrace();
+            }
         }
         return page_hash;
     }
     private String clean(String doc) {
-        // System.out.println(doc);
+        //
         doc = doc.replaceAll(" ", "");
         doc = doc.replaceAll("\n", "");
         doc = doc.replaceAll("\r", "");
@@ -97,7 +103,12 @@ public class Url {
         // get a matcher object
         Matcher m = p.matcher(doc);
         doc = m.replaceAll("=\"\"");
+        System.out.println(doc);
         return doc;
+    }
+
+    public String toString () {
+        return url;
     }
 
 }

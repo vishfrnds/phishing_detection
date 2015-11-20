@@ -5,6 +5,8 @@ import data.Data;
 import redis.clients.jedis.Jedis;
 
 import java.io.*;
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -31,6 +33,16 @@ public class Update {
         System.out.println(url + key + "/" + fileName);
         URL link;
         try {
+            Authenticator.setDefault(
+                    new Authenticator() {
+                        public PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(
+                                    "edcguest", "edcguest".toCharArray());
+                        }
+                    }
+            );
+            System.setProperty("http.proxyHost", "172.31.103.29");
+            System.setProperty("http.proxyPort", "3128");
             link = new URL(url + key + "/" + fileName);
             //(url + key + "/" + fileName); //The file that you want to download
 
@@ -61,10 +73,16 @@ public class Update {
                     String url_ = m.group(1);
                     Url url = new Url(url_);
                     System.out.println("url: " + url.getUrl());
-                    if (!jedis.exists("url:" + url.getCanonical_hash())) {
-                        jedis.set("url:" + url.getCanonical_hash(), url.getUrl());
-                        if (url.getPage_hash() != null) {
-                            jedis.lpush("phishList:" + url.getPage_hash(), url.getCanonical_hash());
+                    if (!jedis.exists("url:" + url.getCanonical_hash()) || jedis.hget("url:" + url.getCanonical_hash(), "pageHash") == null) {
+                        String canonical_hash = url.getCanonical_hash();
+                        String page_hash = url.getPage_hash();
+                        if (canonical_hash != null) {
+                            jedis.hset("url:" + canonical_hash, "url", url.getUrl());
+                        }
+                        if (page_hash != null) {
+                            jedis.hset("url:" + canonical_hash, "pageHash", page_hash);
+                            jedis.lpush("phishList:" + page_hash, canonical_hash);
+                            jedis.sadd("phishHash", page_hash);
                         }
                     }
                 }

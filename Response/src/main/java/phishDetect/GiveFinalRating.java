@@ -8,6 +8,7 @@ package phishDetect;
 
 import data.Url;
 import data.Data;
+import org.apache.log4j.Logger;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -17,7 +18,7 @@ import java.net.URL;
  */
 public class GiveFinalRating {
     private Url url;
-
+    private final static Logger logger = Logger.getLogger(GiveFinalRating.class);
     public GiveFinalRating(String _url) {
         url = new Url(_url);
     }
@@ -35,41 +36,63 @@ public class GiveFinalRating {
 
     public int run() {
 
-        URL_Utilities url_utilities = new URL_Utilities(url);
-        HTML_Utilities html_utilities = new HTML_Utilities(url);
-        Web_Utilities web_utilities = new Web_Utilities(url);
-        int match = premilinary_check();
-        System.out.println(url + "\n" + match);
-        if (match >= 80)
-            return match;
-        match = match / 5;    // 80 -> 8;
-        match += url_utilities.checkURL();
-        System.out.println(url + "\n" + match);
-        if (match > 100)
-            return match;
-        match = match / 3;   // 100->33
+        double match = 0;
 
+        try {
+            logger.debug("\n");
+            //logger.debug("canonicalHash:" + url.getCanonical_hash());
 
-        if (url.getUrl() != null) {
-            if (url.getPage() != null) {
-                match = match / 3;
-                System.out.println(url + "\n got doc");
-                try {
-                    match += html_utilities.checkHTML(new URL (url.toString()), url.getPage());
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(url + "\n" + match);
-                match += web_utilities.checkWEB(url.toString());
-                System.out.println(url + "\n" + match);
+            URL_Utilities url_utilities = new URL_Utilities(url);
+            HTML_Utilities html_utilities = new HTML_Utilities(url);
+            Web_Utilities web_utilities = new Web_Utilities(url);
+            int nearHashBasedDuplicate = premilinary_check();
+            match += nearHashBasedDuplicate;
+            if (match == 1) {
+                return 10;
             }
+            //logger.debug("nearHashBasedDuplicate:" + match);
+            //if (match >= 80)
+            //    return match;
+            //match = match / 5;    // 80 -> 8;
+            double url_utilities_score = url_utilities.checkURL();
+            match += url_utilities_score;
+
+            System.out.println(url + "\n" + match);
+            //if (match > 100)
+            //    return match;
+            //match = match / 3;   // 100->33
+            if (url.getUrl() != null) {
+                if (url.getPage() != null) {
+                    //match = match / 3;
+                    System.out.println(url + "\n got doc");
+                    double html_utilities_score = 0;
+                    try {
+                        html_utilities_score = html_utilities.checkHTML(new URL(url.toString()), url.getPage());
+                        match += html_utilities_score;
+                        //logger.debug("htmlUtilities" + match);
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println(url + "\n" + html_utilities_score);
+                    double web_utilities_score = web_utilities.checkWEB(url.toString());
+                    match += web_utilities_score;
+                    logger.debug(url.getUrl() + "~" + url.getCanonical_hash() + "~" + nearHashBasedDuplicate + "~" + html_utilities_score + "~" + web_utilities_score);
+                    //logger.debug("webUtilities" + match);
+                    System.out.println(url + "\n" + web_utilities_score);
+                }
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
         }
-        match /= 2;
-        return match;
+        System.out.println (match);
+        
+        //match /= 2;
+        return (int)match;
     }
 
     private int premilinary_check() {
-        return (hasDuplicateHash())?100:0;
+
+        return (hasDuplicateHash())?1:0;
     }
     private boolean hasDuplicateHash () {
         return url.getPage_hash() != null && Data.getInstance().getPhish_list().hasPage(url.getPage_hash());

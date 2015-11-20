@@ -7,15 +7,15 @@
 package phishDetect;
 
 import data.Url;
+import org.apache.log4j.Logger;
 import util.hash.JenkinsHash;
 import org.apache.commons.net.whois.WhoisClient;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.SocketException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,28 +23,37 @@ import java.util.regex.Pattern;
  * @author vishwas
  */
 public class Web_Utilities {
-    Url url;
+    private final static Logger logger = Logger.getLogger(Web_Utilities.class);
     public Web_Utilities(Url url) {
-        this.url = url;
+        //this.url = url;
     }
 
-    /**
-     * @param _url
-     * @return google page rank of given url if it exists else returns -10
-     */
-    public static int getPageRank(String _url) {
+    public static int getPageRank(URL Url) {
         String result = "";
-
+        String _url = Url.getHost();
+        System.out.println(_url);
+        try {
+            /*
+            Authenticator.setDefault(
+                    new Authenticator() {
+                        public PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(
+                                    "edcguest", "edcguest".toCharArray());
+                        }
+                    }
+            );
+            System.setProperty("http.proxyHost", "172.31.102.14");
+            System.setProperty("http.proxyPort", "3128");
+            */
         JenkinsHash jenkinsHash = new JenkinsHash();
         long hash = jenkinsHash.hash(("info:" + _url).getBytes());
 
         //Append a 6 in front of the hashing value.
         String url = "http://toolbarqueries.google.com/tbr?client=navclient-auto&hl=en&"
-                + "ch=6" + hash + "&ie=UTF-8&oe=UTF-8&features=Rank&q=info:" + _url;
+                + "ch=6" + hash + "&ie=UTF-8&oe=UTF-8&features=Rank&q=info:" + java.net.URLEncoder.encode(_url);
 
-        //System.out.println("Sending request to : " + url);
+        System.out.println("Sending request to : " + url);
 
-        try {
             URLConnection conn = new URL(url).openConnection();
 
             BufferedReader br = new BufferedReader(new InputStreamReader(
@@ -53,17 +62,20 @@ public class Web_Utilities {
             String input;
             while ((input = br.readLine()) != null) {
 
-                // What Google returned? Example : Rank_1:1:9, PR = 9
-                //System.out.println(input);
+                // Wh                                                                                                                                                                                                                                                                                           at Google returned? Example : Rank_1:1:9, PR = 9
+                System.out.println(input);
 
                 result = input.substring(input.lastIndexOf(":") + 1);
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
+            //System.out.println(e.getMessage());
         }
         System.out.println("pr " + result);
         if ("".equals(result)) {
-            return -5;
+            //StringTokenizer st = new StringTokenizer(_url);
+
+            return -1;
         } else {
             return Integer.valueOf(result);
         }
@@ -100,13 +112,20 @@ public class Web_Utilities {
         return 0;//whoisResult.toString();
     }
 
-    int checkWEB(String _url) {
-        int ans = 0;
-        int pr = getPageRank(_url);
+    double checkWEB(String _url) throws MalformedURLException {
+        double ans = 0;
+        int pr = getPageRank(new URL(_url));
+        ans = (2 - pr) * 2.3122;
+
+        System.out.println ("PageRank" + pr);
+        /*
         if (pr >= 2)
             ans -= pr * 5;
         else
             ans += -5 * pr;
+
+        */
+        logger.debug(pr + "~");
         return ans;
     }
 
