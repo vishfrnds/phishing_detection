@@ -28,20 +28,16 @@ public class HTML_Utilities {
     }
 
     double checkHTML(URL url, Document doc) {
-        //int ans = 0;
         int login_form = 0;
         if (hasLoginForm(doc)) {
             login_form = 1;
-           // ans += 20;
         }
         int bad_action_field = 0;
         if (badActionField(url)) {
             bad_action_field = 1;
-           // ans += 5 * multplier;
         }
         int non_matching_url = nonMatchingUrls(url, doc);
-        //ans += non_matching_url * multplier / 3;
-        double ans = login_form * 0.4498 + bad_action_field * 0.4418 + non_matching_url * 0.1820;
+        double ans = login_form * 0.4498 + bad_action_field * 0.4418 + non_matching_url * 0.01820;
         System.out.println("html" + ans);
         logger.debug(login_form + "~" + bad_action_field + "~" + non_matching_url + "~");
         return ans;
@@ -112,7 +108,6 @@ public class HTML_Utilities {
             }
 
         }
-       // return (crossdomain + 2 * invalid) * 100 / total;
         return crossdomain + invalid;
     }
 }

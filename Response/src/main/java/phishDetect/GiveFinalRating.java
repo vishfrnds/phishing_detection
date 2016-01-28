@@ -27,7 +27,7 @@ public class GiveFinalRating {
         int ans = 0;
         //for(int i = 0; i < l; i +=100)
         {
-            int x = new GiveFinalRating("http://academics.mnnit.ac.in").run();
+            double x = new GiveFinalRating("http://academics.mnnit.ac.in").run();
             //System.out.println("http://acade");
             ans += x;
         }
@@ -76,7 +76,7 @@ public class GiveFinalRating {
                     System.out.println(url + "\n" + html_utilities_score);
                     double web_utilities_score = web_utilities.checkWEB(url.toString());
                     match += web_utilities_score;
-                    logger.debug(url.getUrl() + "~" + url.getCanonical_hash() + "~" + nearHashBasedDuplicate + "~" + html_utilities_score + "~" + web_utilities_score);
+                    logger.debug(url.getUrl() + "~" + url.getCanonical_hash() + "~" + nearHashBasedDuplicate + "~" + html_utilities_score + "~" + web_utilities_score + "~" + match);
                     //logger.debug("webUtilities" + match);
                     System.out.println(url + "\n" + web_utilities_score);
                 }

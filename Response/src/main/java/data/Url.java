@@ -52,7 +52,6 @@ public class Url {
         if (page == null) {
 
             try {
-                /*
             Authenticator.setDefault(
                     new Authenticator() {
                         public PasswordAuthentication getPasswordAuthentication() {
@@ -66,13 +65,13 @@ public class Url {
 
                 //System.out.println(_url)
 
-                System.setProperty("java.net.useSystemProxies", "true");
-
+              //  System.setProperty("java.net.useSystemProxies", "true");
+/*
             System.setProperty("http.proxyHost", "172.31.102.14");
             System.setProperty("http.proxyPort", "" + "3128");
             System.setProperty("http.proxyUser","edcguest");
             System.setProperty("http.proxyPassword","edcguest");
-            */
+*/
                 page = Jsoup.connect(url).get();
                 ;
             } catch (Exception e) {

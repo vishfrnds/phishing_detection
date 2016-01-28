@@ -33,7 +33,7 @@ public class Web_Utilities {
         String _url = Url.getHost();
         System.out.println(_url);
         try {
-            /*
+
             Authenticator.setDefault(
                     new Authenticator() {
                         public PasswordAuthentication getPasswordAuthentication() {
@@ -44,9 +44,9 @@ public class Web_Utilities {
             );
             System.setProperty("http.proxyHost", "172.31.102.14");
             System.setProperty("http.proxyPort", "3128");
-            */
-        JenkinsHash jenkinsHash = new JenkinsHash();
-        long hash = jenkinsHash.hash(("info:" + _url).getBytes());
+
+            JenkinsHash jenkinsHash = new JenkinsHash();
+            long hash = jenkinsHash.hash(("info:" + _url).getBytes());
 
         //Append a 6 in front of the hashing value.
         String url = "http://toolbarqueries.google.com/tbr?client=navclient-auto&hl=en&"
@@ -83,12 +83,14 @@ public class Web_Utilities {
     }
 
     //not helpful
+
+    /*
     public static int domainAge(String domainName) {
         StringBuilder whoisResult = new StringBuilder("");
 
         WhoisClient crunchifyWhois = new WhoisClient();
         try {
-            // The WhoisClient class implements the client side of the Internet
+            // The W    hoisClient class implements the client side of the Internet
             // Whois Protocol defined in RFC 954. To query a host you create a
             // WhoisClient instance, connect to the host, query the host, and
             // finally disconnect from the host. If the whois service you want
@@ -111,6 +113,7 @@ public class Web_Utilities {
 
         return 0;//whoisResult.toString();
     }
+    */
 
     double checkWEB(String _url) throws MalformedURLException {
         double ans = 0;
