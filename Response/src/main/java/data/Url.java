@@ -51,6 +51,16 @@ public class Url {
     public Document getPage() {
         if (page == null) {
 
+            System.setProperty("java.net.useSystemProxies", "true");
+
+            System.setProperty("http.proxyHost", "172.31.100.14");
+            System.setProperty("http.proxyPort", "3128");
+            System.setProperty("http.proxyUser","edcguest");
+            System.setProperty("https.proxyPassword","edcguest");
+            System.setProperty("https.proxyHost", "172.31.100.14");
+            System.setProperty("https.proxyPort", "3128");
+            System.setProperty("https.proxyUser","edcguest");
+            System.setProperty("https.proxyPassword","edcguest");
             try {
             Authenticator.setDefault(
                     new Authenticator() {
@@ -60,8 +70,8 @@ public class Url {
                         }
                     }
             );
-            System.setProperty("http.proxyHost", "172.31.102.14");
-            System.setProperty("http.proxyPort", "3128");
+          //  System.setProperty("http.proxyHost", "172.31.102.14");
+          //  System.setProperty("http.proxyPort", "3128");
 
                 //System.out.println(_url)
 
@@ -73,7 +83,6 @@ public class Url {
             System.setProperty("http.proxyPassword","edcguest");
 */
                 page = Jsoup.connect(url).get();
-                ;
             } catch (Exception e) {
                 page = null;
                 e.printStackTrace();
