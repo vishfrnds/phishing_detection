@@ -35,8 +35,9 @@ public class Calculate extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            String url = request.getParameter("q");
-            //out.println("in serv" + url);
+             System.out.println ("Post");
+            String html = request.getParameter("webPage");
+            String url = request.getParameter("url");
             GiveFinalRating r = new GiveFinalRating(url);
             int v = r.run();
             if (v < 2)

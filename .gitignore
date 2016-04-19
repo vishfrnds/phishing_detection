@@ -8,6 +8,8 @@ META-INF/
 *.gz
 *.rdb
 *.log
+*.bk
+!manifest.json
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
